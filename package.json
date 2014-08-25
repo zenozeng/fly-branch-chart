@@ -1,0 +1,30 @@
+{
+  "name": "fly-branch-chart",
+  "version": "0.0.1",
+  "description": "Simple area chart with simple tooltip support",
+  "main": "lib/simple-area-chart.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zenozeng/simple-area-chart.git"
+  },
+  "author": "Zeno Zeng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zenozeng/simple-area-chart/issues"
+  },
+  "homepage": "https://github.com/zenozeng/simple-area-chart",
+  "devDependencies": {
+    "node-watch": "^0.3.4"
+  },
+  "dependencies": {
+    "node-watch": "^0.3.4"
+  },
+  "keywords": [
+    "fly",
+    "branch",
+    "chart"
+  ]
+}
