@@ -10,14 +10,26 @@ for(var i = 0; i < 200; i++) {
     li.dataset.flyBranch = JSON.stringify(branches);
     ul.appendChild(li);
 }
-var opts = {
-    width: 200,
-    height: 400,
-    container: ul,
-    elements: ul.querySelectorAll('li'),
-    canvas: document.querySelector('canvas')
-};
-var flyBranchChart = new FlyBranchChart(opts);
+var yaUl = ul.cloneNode(true);
+document.body.appendChild(yaUl);
+
+var flyBranchChart = new FlyBranchChart([
+    {
+        width: 200,
+        height: 400,
+        container: ul,
+        elements: ul.querySelectorAll('li'),
+        canvas: document.querySelector('#c1')
+    },
+    {
+        width: 200,
+        height: 400,
+        container: yaUl,
+        elements: yaUl.querySelectorAll('li'),
+        canvas: document.querySelector('#c2'),
+        reverse: true
+    }
+]);
 flyBranchChart.start();
 ul.addEventListener('scroll', function() {
     flyBranchChart.resume();
