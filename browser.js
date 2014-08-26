@@ -1,5 +1,5 @@
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.FlyBranchChart=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var Interval = require('node-interval');
+var Interval = require('interval-js');
 
 var generateDrawFn = function(options) {
     var devicePixelRatio = window.devicePixelRatio,
@@ -80,15 +80,16 @@ var FlyBranchChart = function(options) {
         return generateDrawFn(opts);
     });
     return new Interval(function() {
+        console.log('test');
         fns.forEach(function(fn) {
             fn();
         });
-    }, 16, 1000);
+    }, {lifetime: 1000, useRequestAnimationFrame: true});
 };
 
 module.exports = FlyBranchChart;
 
-},{"node-interval":2}],2:[function(require,module,exports){
+},{"interval-js":2}],2:[function(require,module,exports){
 /**
  * Interval.js
  *
@@ -97,10 +98,11 @@ module.exports = FlyBranchChart;
  * @param {int} delay - milliseconds that should wait before each call
  * @param {int} lifetime - if set, clearInterval will be called after `lifetime` milliseconds
  */
-function Interval(func, delay, lifetime) {
+function Interval(func, options) {
     this.func = func;
-    this.delay = delay;
-    this.lifetime = lifetime;
+    this.delay = options.delay || 16;
+    this.lifetime = options.lifetime;
+    this.useRequestAnimationFrame = options.useRequestAnimationFrame && window.requestAnimationFrame && window.cancelAnimationFrame;
     this.interval = null;
     this.gcTimeout = null;
 }
@@ -112,12 +114,16 @@ var interval = Interval.prototype;
  *
  * @method Interval#pause
  */
-Interval.prototype.pause = function() {
-    if(this.interval) {
-        clearInterval(this.interval);
+Interval.prototype.pause = function () {
+    if (this.interval) {
+        if(this.useRequestAnimationFrame) {
+            window.cancelAnimationFrame(this.interval);
+        } else {
+            clearInterval(this.interval);
+        }
         this.interval = null;
     }
-}
+};
 
 /**
  * setInterval if not set
@@ -128,7 +134,7 @@ interval.resume = function() {
     if(this.interval === null) {
         this.start();
     }
-}
+};
 
 /**
  * setInterval & setTimeout for clearInterval if lifetime set
@@ -138,10 +144,19 @@ interval.resume = function() {
  * @param {int} lifetime - if set, clearInterval will be called after `lifetime` milliseconds, defaults to this.lifetime
  */
 interval.start = function(delay, lifetime) {
+    var self = this;
     this.stop();
     delay = delay || this.delay;
     lifetime = lifetime || this.lifetime;
-    this.interval = setInterval(this.func, this.delay);
+    if(this.useRequestAnimationFrame) {
+        var fn = function() {
+            self.func();
+            self.interval = window.requestAnimationFrame(fn);
+        };
+        this.interval = window.requestAnimationFrame(fn);
+    } else {
+        this.interval = setInterval(this.func, this.delay);
+    }
     if(lifetime) {
         var that = this;
         this.gcTimeout = setTimeout(function() {
@@ -149,7 +164,7 @@ interval.start = function(delay, lifetime) {
             that.stop();
         }, lifetime);
     }
-}
+};
 
 /**
  * clearInterval and clearTimeout for lifetime
@@ -157,15 +172,12 @@ interval.start = function(delay, lifetime) {
  * @method Interval#stop
  */
 interval.stop = function() {
-    if(this.interval) {
-        clearInterval(this.interval);
-        this.interval = null;
-    }
+    this.pause();
     if(this.gcTimeout) {
         clearTimeout(this.gcTimeout);
         this.gcTimeout = null;
     }
-}
+};
 
 /**
  * Run func once
@@ -174,7 +186,7 @@ interval.stop = function() {
  */
 interval.once = function() {
     this.func();
-}
+};
 
 interval.restart = interval.start;
 

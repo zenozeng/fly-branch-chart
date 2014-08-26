@@ -20,8 +20,7 @@
     "node-watch": "^0.3.4"
   },
   "dependencies": {
-    "node-interval": "^0.1.1",
-    "node-watch": "^0.3.4"
+    "interval-js": "^0.2.1"
   },
   "keywords": [
     "fly",
