@@ -1,5 +1,47 @@
 # Fly Branch Chart
 
+## Demo
+
+http://zenozeng.github.io/fly-branch-chart/demo/
+
+## Usage
+
+```javascript
+var flyBranchChart = new FlyBranchChart([
+    {
+        width: 200,
+        height: 400,
+        container: ul,
+        elements: ul.querySelectorAll('li'),
+        canvas: document.querySelector('#c1')
+    },
+    {
+        width: 200,
+        height: 400,
+        container: yaUl,
+        elements: yaUl.querySelectorAll('li'),
+        canvas: document.querySelector('#c2'),
+        reverse: true
+    }
+]);
+flyBranchChart.start();
+ul.addEventListener('scroll', function() {
+    flyBranchChart.resume();
+});
+yaUl.addEventListener('scroll', function() {
+    flyBranchChart.resume();
+});
+```
+Set or update the branches config for a single `li`:
+
+```javascript
+var branches = [
+    {color: "rgba(0, 0, 0, .15)", width: branchWidth},
+    {color: "rgba(0, 100, 205, .5)", width: Math.random() * branchWidth}
+];
+li.dataset.flyBranch = JSON.stringify(branches);
+```
+
 ## License
 
 The MIT License (MIT)
