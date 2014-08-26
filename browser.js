@@ -19,11 +19,14 @@ var generateDrawFn = function(options) {
             containerHeight = container.offsetHeight;
 
         var visibleElements = [];
+        var getTop = function(elem) {
+            return elem.offsetTop - container.offsetTop - scrollTop;
+        };
         for(var i = 0; i < elements.length; i++) {
             var elem = elements[i];
             if(elem.offsetHeight === 0) continue;
-            var top = elem.offsetTop - container.firstElementChild.offsetTop - scrollTop;
-            if( top >= 0 && top < containerHeight) {
+            var top = getTop(elem);
+            if( top >= -elem.offsetHeight && top < containerHeight) {
                 visibleElements.push(elem);
             }
         }
@@ -40,7 +43,8 @@ var generateDrawFn = function(options) {
             }));
             branches.forEach(function(branch) {
                 var w = branch.width;
-                var top = elem.offsetTop - container.firstElementChild.offsetTop - scrollTop;
+                var top = getTop(elem);
+
                 // L1 L2
                 // L3 L4
                 var L1 = {
@@ -83,7 +87,7 @@ var FlyBranchChart = function(options) {
         fns.forEach(function(fn) {
             fn();
         });
-    }, {lifetime: 1000, useRequestAnimationFrame: true});
+    }, {lifetime: 5000, useRequestAnimationFrame: true});
 };
 
 module.exports = FlyBranchChart;
