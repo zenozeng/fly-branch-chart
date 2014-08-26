@@ -1,6 +1,6 @@
 {
   "name": "fly-branch-chart",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Fly branch chart",
   "main": "lib/fly-branch-chart.js",
   "scripts": {
