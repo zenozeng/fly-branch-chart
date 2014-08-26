@@ -4,8 +4,8 @@ for(var i = 0; i < 200; i++) {
     li.innerHTML = "No. " + i;
     var branchWidth = Math.random() * 48;
     var branches = [
-        {color: "rgba(0, 0, 0, .3)", width: branchWidth},
-        {color: "rgba(0, 0, 255, .3)", width: Math.random() * branchWidth}
+        {color: "rgba(0, 0, 0, .15)", width: branchWidth},
+        {color: "rgba(0, 100, 205, .5)", width: Math.random() * branchWidth}
     ];
     li.dataset.flyBranch = JSON.stringify(branches);
     ul.appendChild(li);
@@ -32,5 +32,8 @@ var flyBranchChart = new FlyBranchChart([
 ]);
 flyBranchChart.start();
 ul.addEventListener('scroll', function() {
+    flyBranchChart.resume();
+});
+yaUl.addEventListener('scroll', function() {
     flyBranchChart.resume();
 });

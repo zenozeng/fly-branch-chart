@@ -83,7 +83,7 @@ var FlyBranchChart = function(options) {
         fns.forEach(function(fn) {
             fn();
         });
-    }, 16);
+    }, 16, 1000);
 };
 
 module.exports = FlyBranchChart;
