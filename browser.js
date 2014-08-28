@@ -43,6 +43,9 @@ var generateDrawFn = function(options) {
             }));
             branches.forEach(function(branch) {
                 var w = branch.width;
+                if(w < 1) {
+                    return;
+                }
                 var top = getTop(elem);
 
                 // L1 L2
